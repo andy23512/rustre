@@ -1,8 +1,21 @@
 {
   "name": "cargo",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "main.js",
   "repository": "git@github.com:andy23512/cargo.git",
   "author": "Tangent Chang <andy23512@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "bin": {
+    "cargo": "./index.js"
+  },
+  "scripts": {
+    "start": "ts-node src/cargo.ts",
+    "build": "tsc"
+  },
+  "files": ["main.js", "dist/cargo.js"],
+  "devDependencies": {
+    "ts-node": "^8.2.0",
+    "tslint": "^5.17.0",
+    "typescript": "^3.5.1"
+  }
 }
