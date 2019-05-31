@@ -10,7 +10,8 @@
   },
   "scripts": {
     "start": "ts-node src/cargo.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "precommit-build": "tsc && git add dist/"
   },
   "files": [
     "main.js",
@@ -23,6 +24,6 @@
     "precommit-hook": "^3.0.0"
   },
   "pre-commit": [
-    "build"
+    "precommit-build"
   ]
 }
