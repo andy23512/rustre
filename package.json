@@ -1,0 +1,8 @@
+{
+  "name": "cargo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:andy23512/cargo.git",
+  "author": "Tangent Chang <andy23512@gmail.com>",
+  "license": "MIT"
+}
