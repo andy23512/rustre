@@ -6,7 +6,7 @@
   "author": "Tangent Chang <andy23512@gmail.com>",
   "license": "MIT",
   "bin": {
-    "cargo": "./index.js"
+    "cargo": "./main.js"
   },
   "scripts": {
     "start": "ts-node src/cargo.ts",
