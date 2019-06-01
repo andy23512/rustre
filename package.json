@@ -1,21 +1,21 @@
 {
-  "name": "cargo",
+  "name": "rustre",
   "version": "1.0.0",
   "main": "main.js",
-  "repository": "git@github.com:andy23512/cargo.git",
+  "repository": "git@github.com:andy23512/rustre.git",
   "author": "Tangent Chang <andy23512@gmail.com>",
   "license": "MIT",
   "bin": {
     "cargo": "./main.js"
   },
   "scripts": {
-    "start": "ts-node src/cargo.ts",
+    "start": "ts-node src/rustre.ts",
     "build": "tsc",
     "precommit-build": "tsc && git add dist/"
   },
   "files": [
     "main.js",
-    "dist/cargo.js"
+    "dist/rustre.js"
   ],
   "devDependencies": {
     "@types/node": "^12.0.4",

@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('./dist/cargo.js')
+require('./dist/rustre.js')

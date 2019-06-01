@@ -40,4 +40,4 @@ else {
     });
     console.log(js_yaml_1.safeDump(newDoc, { lineWidth: Number.MAX_SAFE_INTEGER }));
 }
-//# sourceMappingURL=cargo.js.map
+//# sourceMappingURL=rustre.js.map
