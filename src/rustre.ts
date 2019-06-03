@@ -1,5 +1,6 @@
-import { safeLoad, safeDump } from 'js-yaml';
 import { existsSync, lstatSync, readFileSync } from 'fs';
+import inquirer from 'inquirer';
+import { safeLoad, safeDump } from 'js-yaml';
 
 import { DockerCompose } from './models';
 
@@ -18,16 +19,22 @@ if (!dockerComposeFile) {
 }
 
 const dockerComposeContent = readFileSync(dockerComposeFile, 'utf8');
-
-if (!selectedServices) {
-  // no service selected, then pass whole docker-compose file content
-  console.log(dockerComposeContent);
-} else {
-  // parse compose file
-  const doc: DockerCompose = safeLoad(dockerComposeContent);
-
-  let queue: string[] = selectedServices.split(',');
-  let startServices: string[] = [...queue];
+const doc: DockerCompose = safeLoad(dockerComposeContent);
+const allServices = Object.keys(doc.services);
+console.clear();
+const prompt = inquirer.createPromptModule({ output: process.stderr });
+prompt<{ services: string[] }>([
+  {
+    type: 'checkbox',
+    name: 'services',
+    message:
+      'Choose the services to run (dependency services are automatically added)',
+    choices: allServices,
+    pageSize: 20
+  }
+]).then(({ services }) => {
+  let queue: string[] = [...services];
+  let startServices: string[] = [...services];
   // extract depends_on field of each selected service
   while (queue.length) {
     const currentService = queue.shift();
@@ -45,4 +52,4 @@ if (!selectedServices) {
     newDoc.services[service] = doc.services[service];
   });
   console.log(safeDump(newDoc, { lineWidth: Number.MAX_SAFE_INTEGER }));
-}
+});
