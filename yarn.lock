@@ -26,10 +26,23 @@
     "@types/through" "*"
     rxjs "^6.4.0"
 
+"@types/node-persist@^0.0.33":
+  version "0.0.33"
+  resolved "https://registry.yarnpkg.com/@types/node-persist/-/node-persist-0.0.33.tgz#d3c294324a86385b7763a37d160efc0c5ee265c6"
+  integrity sha512-JY/aQpndK6Nb/9ccfAaptSgzUpZp2VXillSXNrD40CURfFACWTMyGnFYzz4L44iKu7CTIg6hqjRZbBCr60URdw==
+  dependencies:
+    "@types/node" "*"
+    "@types/q" "^0"
+
 "@types/node@*", "@types/node@^12.0.4":
   version "12.0.4"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-12.0.4.tgz#46832183115c904410c275e34cf9403992999c32"
   integrity sha512-j8YL2C0fXq7IONwl/Ud5Kt0PeXw22zGERt+HSSnwbKOJVsAGkEz3sFCYwaF9IOuoG1HOtE0vKCj6sXF7Q0+Vaw==
+
+"@types/q@^0":
+  version "0.0.37"
+  resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.37.tgz#7d6a934b35ee2f0ed0646d286eba559599021c9e"
+  integrity sha512-vjFGX1zMTMz/kUp3xgfJcxMVLkMWVMrdlyc0RwVyve1y9jxwqNaT8wTcv6M51ylq2a/zn5lm8g7qPSoIS4uvZQ==
 
 "@types/through@*":
   version "0.0.29"
@@ -398,7 +411,7 @@ minimist@0.0.8:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-0.0.8.tgz#857fcabfc3397d2625b8228262e86aa7a011b05d"
   integrity sha1-hX/Kv8M5fSYluCKCYuhqp6ARsF0=
 
-mkdirp@^0.5.1:
+mkdirp@^0.5.1, mkdirp@~0.5.1:
   version "0.5.1"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-0.5.1.tgz#30057438eac6cf7f8c4767f38648d6697d75c903"
   integrity sha1-MAV0OOrGz3+MR2fzhkjWaX11yQM=
@@ -409,6 +422,13 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
   integrity sha1-MHXOk7whuPq0PhvE2n6BFe0ee6s=
+
+node-persist@^3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/node-persist/-/node-persist-3.0.4.tgz#c1bb2a7216eec334ab8587edbbe5b535012f96e5"
+  integrity sha512-/0r1KYqeEKrVvxwQ513rAUG7sNndoi+qgXdRutfaaRWc4axVeoINq2s5vOZ6xVUWKm67ML0gR5UhBuha6M8VJg==
+  dependencies:
+    mkdirp "~0.5.1"
 
 once@^1.3.0:
   version "1.4.0"

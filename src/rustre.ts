@@ -1,12 +1,15 @@
 import { existsSync, lstatSync, readFileSync } from 'fs';
 import inquirer from 'inquirer';
 import { safeLoad, safeDump } from 'js-yaml';
+import storage from 'node-persist';
+import { join, resolve } from 'path';
 
 import { DockerCompose } from './models';
 
 // Read from argv
 const dockerComposeFile = process.argv[2];
 const selectedServices = process.argv[3];
+const dockerComposeFilePath = resolve(dockerComposeFile);
 
 // Validation
 if (!dockerComposeFile) {
@@ -21,23 +24,50 @@ if (!dockerComposeFile) {
 const dockerComposeContent = readFileSync(dockerComposeFile, 'utf8');
 const doc: DockerCompose = safeLoad(dockerComposeContent);
 const allServices = Object.keys(doc.services);
-console.clear();
-const prompt = inquirer.createPromptModule({ output: process.stderr });
-prompt<{ services: string[] }>([
-  {
-    type: 'checkbox',
-    name: 'services',
-    message:
-      'Choose the services to run (dependency services are automatically added)',
-    choices: allServices,
-    pageSize: 20
+
+(async () => {
+  await storage.init({
+    dir: join(__dirname, '../.store')
+  });
+  let previousSelectedServices: string[] = await storage.getItem(
+    dockerComposeFilePath
+  );
+  if (!previousSelectedServices) {
+    previousSelectedServices = [];
   }
-]).then(({ services }) => {
-  let queue: string[] = [...services];
-  let startServices: string[] = [...services];
+  console.clear();
+  if (!selectedServices) {
+    const prompt = inquirer.createPromptModule({ output: process.stderr });
+    const { services } = await prompt<{ services: string[] }>([
+      {
+        type: 'checkbox',
+        name: 'services',
+        message:
+          'Choose the services to run (dependency services are automatically added)',
+        choices: allServices.map(name => ({
+          name,
+          value: name,
+          checked: previousSelectedServices.includes(name)
+        })),
+        pageSize: 20
+      }
+    ]);
+    await filterService(services);
+  } else {
+    await filterService(selectedServices.split(','));
+  }
+})();
+
+async function filterService(services: string[]) {
+  await storage.setItem(dockerComposeFilePath, services);
+  let queue = [...services];
+  let startServices = [...services];
   // extract depends_on field of each selected service
   while (queue.length) {
     const currentService = queue.shift();
+    if (!doc.services[currentService]) {
+      continue;
+    }
     const dependServices = doc.services[currentService].depends_on;
     if (dependServices) {
       queue = [...queue, ...dependServices];
@@ -49,7 +79,9 @@ prompt<{ services: string[] }>([
   const newDoc: DockerCompose = { ...doc };
   newDoc.services = {};
   startServices.forEach(service => {
-    newDoc.services[service] = doc.services[service];
+    if (doc.services) {
+      newDoc.services[service] = doc.services[service];
+    }
   });
   console.log(safeDump(newDoc, { lineWidth: Number.MAX_SAFE_INTEGER }));
-});
+}

@@ -1,35 +1,37 @@
 {
-  "name": "rustre",
-  "version": "1.0.0",
-  "main": "main.js",
-  "repository": "git@github.com:andy23512/rustre.git",
-  "author": "Tangent Chang <andy23512@gmail.com>",
-  "license": "MIT",
-  "bin": {
-    "rustre": "./main.js"
-  },
-  "scripts": {
-    "start": "ts-node src/rustre.ts",
-    "build": "tsc",
-    "precommit-build": "tsc && git add dist/"
-  },
-  "files": [
-    "main.js",
-    "dist/rustre.js"
-  ],
-  "devDependencies": {
-    "@types/inquirer": "^6.0.3",
-    "@types/node": "^12.0.4",
-    "precommit-hook": "^3.0.0",
-    "ts-node": "^8.2.0",
-    "tslint": "^5.17.0",
-    "typescript": "^3.5.1"
-  },
-  "pre-commit": [
-    "precommit-build"
-  ],
-  "dependencies": {
-    "inquirer": "^6.3.1",
-    "js-yaml": "^3.13.1"
-  }
+	"name": "rustre",
+	"version": "1.0.0",
+	"main": "main.js",
+	"repository": "git@github.com:andy23512/rustre.git",
+	"author": "Tangent Chang <andy23512@gmail.com>",
+	"license": "MIT",
+	"bin": {
+		"rustre": "./main.js"
+	},
+	"scripts": {
+		"start": "ts-node src/rustre.ts",
+		"build": "tsc",
+		"precommit-build": "tsc && git add dist/"
+	},
+	"files": [
+		"main.js",
+		"dist/rustre.js"
+	],
+	"devDependencies": {
+		"@types/inquirer": "^6.0.3",
+		"@types/node": "^12.0.4",
+		"@types/node-persist": "^0.0.33",
+		"precommit-hook": "^3.0.0",
+		"ts-node": "^8.2.0",
+		"tslint": "^5.17.0",
+		"typescript": "^3.5.1"
+	},
+	"pre-commit": [
+		"precommit-build"
+	],
+	"dependencies": {
+		"inquirer": "^6.3.1",
+		"js-yaml": "^3.13.1",
+		"node-persist": "^3.0.4"
+	}
 }
