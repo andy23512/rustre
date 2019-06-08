@@ -17,15 +17,22 @@ const js_yaml_1 = require("js-yaml");
 const node_persist_1 = __importDefault(require("node-persist"));
 const path_1 = require("path");
 // Read from argv
-const dockerComposeFile = process.argv[2];
-const selectedServices = process.argv[3];
+let dockerComposeFile = process.argv[2];
+// auto determine default docker-compose file
+if (!dockerComposeFile) {
+    if (fs_1.existsSync(path_1.resolve('docker-compose.yml'))) {
+        dockerComposeFile = 'docker-compose.yml';
+    }
+    else if (fs_1.existsSync(path_1.resolve('docker-compose.yaml'))) {
+        dockerComposeFile = 'docker-compose.yaml';
+    }
+    else {
+        throw new Error('No docker-compose file was founded or given in command.');
+    }
+}
 const dockerComposeFilePath = path_1.resolve(dockerComposeFile);
 // Validation
-if (!dockerComposeFile) {
-    throw new Error('No docker-compose file was given in command.');
-}
-else if (!fs_1.existsSync(dockerComposeFile) ||
-    !fs_1.lstatSync(dockerComposeFile).isFile()) {
+if (!fs_1.existsSync(dockerComposeFile) || !fs_1.lstatSync(dockerComposeFile).isFile()) {
     throw new Error('No docker-compose file founded at the given path.');
 }
 const dockerComposeContent = fs_1.readFileSync(dockerComposeFile, 'utf8');
@@ -40,26 +47,21 @@ const allServices = Object.keys(doc.services);
         previousSelectedServices = [];
     }
     console.clear();
-    if (!selectedServices) {
-        const prompt = inquirer_1.default.createPromptModule({ output: process.stderr });
-        const { services } = yield prompt([
-            {
-                type: 'checkbox',
-                name: 'services',
-                message: 'Choose the services to run (dependency services are automatically added)',
-                choices: allServices.map(name => ({
-                    name,
-                    value: name,
-                    checked: previousSelectedServices.includes(name)
-                })),
-                pageSize: 20
-            }
-        ]);
-        yield filterService(services);
-    }
-    else {
-        yield filterService(selectedServices.split(','));
-    }
+    const prompt = inquirer_1.default.createPromptModule({ output: process.stderr });
+    const { services } = yield prompt([
+        {
+            type: 'checkbox',
+            name: 'services',
+            message: 'Choose the services to run (dependency services are automatically added)',
+            choices: allServices.map(name => ({
+                name,
+                value: name,
+                checked: previousSelectedServices.includes(name)
+            })),
+            pageSize: 20
+        }
+    ]);
+    yield filterService(services);
 }))();
 function filterService(services) {
     return __awaiter(this, void 0, void 0, function* () {

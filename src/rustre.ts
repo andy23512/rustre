@@ -7,17 +7,22 @@ import { join, resolve } from 'path';
 import { DockerCompose } from './models';
 
 // Read from argv
-const dockerComposeFile = process.argv[2];
-const selectedServices = process.argv[3];
+let dockerComposeFile = process.argv[2];
+
+// auto determine default docker-compose file
+if (!dockerComposeFile) {
+  if (existsSync(resolve('docker-compose.yml'))) {
+    dockerComposeFile = 'docker-compose.yml';
+  } else if (existsSync(resolve('docker-compose.yaml'))) {
+    dockerComposeFile = 'docker-compose.yaml';
+  } else {
+    throw new Error('No docker-compose file was founded or given in command.');
+  }
+}
 const dockerComposeFilePath = resolve(dockerComposeFile);
 
 // Validation
-if (!dockerComposeFile) {
-  throw new Error('No docker-compose file was given in command.');
-} else if (
-  !existsSync(dockerComposeFile) ||
-  !lstatSync(dockerComposeFile).isFile()
-) {
+if (!existsSync(dockerComposeFile) || !lstatSync(dockerComposeFile).isFile()) {
   throw new Error('No docker-compose file founded at the given path.');
 }
 
@@ -36,26 +41,22 @@ const allServices = Object.keys(doc.services);
     previousSelectedServices = [];
   }
   console.clear();
-  if (!selectedServices) {
-    const prompt = inquirer.createPromptModule({ output: process.stderr });
-    const { services } = await prompt<{ services: string[] }>([
-      {
-        type: 'checkbox',
-        name: 'services',
-        message:
-          'Choose the services to run (dependency services are automatically added)',
-        choices: allServices.map(name => ({
-          name,
-          value: name,
-          checked: previousSelectedServices.includes(name)
-        })),
-        pageSize: 20
-      }
-    ]);
-    await filterService(services);
-  } else {
-    await filterService(selectedServices.split(','));
-  }
+  const prompt = inquirer.createPromptModule({ output: process.stderr });
+  const { services } = await prompt<{ services: string[] }>([
+    {
+      type: 'checkbox',
+      name: 'services',
+      message:
+        'Choose the services to run (dependency services are automatically added)',
+      choices: allServices.map(name => ({
+        name,
+        value: name,
+        checked: previousSelectedServices.includes(name)
+      })),
+      pageSize: 20
+    }
+  ]);
+  await filterService(services);
 })();
 
 async function filterService(services: string[]) {
