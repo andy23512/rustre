@@ -27,7 +27,7 @@ if (!dockerComposeFile) {
         dockerComposeFile = 'docker-compose.yaml';
     }
     else {
-        throw new Error('No docker-compose file was founded or given in command.');
+        throw new Error('No docker-compose file was founded or given in command argument.');
     }
 }
 const dockerComposeFilePath = path_1.resolve(dockerComposeFile);
